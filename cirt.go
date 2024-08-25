@@ -56,5 +56,5 @@ func (s Service) CalculoSubisiodio(subsidio float64, days ...int) (float64, erro
 		return 0, ErrSubsidioNegative
 	}
 
-	return  subsidio * float64(defaultDays), nil
+	return  s.round(subsidio * float64(defaultDays), 2), nil
 }

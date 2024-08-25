@@ -129,6 +129,22 @@ func TestCirt(t *testing.T) {
 			}
 		})
 
+		t.Run("Should calculate subsidio de alimentação with more than one decimal places", func(t *testing.T) {
+			// Arrange
+			service := cirt.NewService()
+			subsidio := 1000.459
+
+			expected := 22010.10
+
+			// Act
+			result, _ := service.CalculoSubisiodio(subsidio)
+
+			// Assert
+			if result != float64(expected) {
+				t.Errorf("Expected %v, received %v", expected, result)
+			}
+		})
+
 		t.Run("Should not calculate subsidio de alimentação when subsidio is negative", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
