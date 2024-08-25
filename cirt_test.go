@@ -234,4 +234,25 @@ func TestCirt(t *testing.T) {
 			}
 		})
 	})
+
+	t.Run("Imposto sobre Rendimento de Trabalho (IRT)", func(t *testing.T) {
+		t.Run("Should calculate materia colecctavel", func(t *testing.T) {
+			// Arrange
+			service := cirt.NewService()
+			salarybase := 20000.0
+			sujeicaoIrt := 16000.0
+			inss := 20000.0
+
+			expected := 16000.0
+
+			// Act
+			result := service.CalculateMateriaColectavel(salarybase, sujeicaoIrt, inss)
+
+			// Assert
+			if result != float64(expected) {
+				t.Errorf("Expected %v, received %v", expected, result)
+			} 
+
+		})
+	})
 }

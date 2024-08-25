@@ -69,3 +69,7 @@ func (s Service) CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsi
 
 	return s.round(result, 2), nil
 }
+
+func (s Service) CalculateMateriaColectavel(salaryBase, sujeicaoIrt, inss float64) float64 {
+	return salaryBase + sujeicaoIrt - inss
+}
