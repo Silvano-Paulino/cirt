@@ -1,6 +1,13 @@
 package cirt
 
-import "math"
+import (
+	"errors"
+	"math"
+)
+
+var (
+	ErrSalaryBaseNegative = errors.New("Salary base cannot be negative")
+)
 
 type Service struct{}
 
@@ -17,14 +24,18 @@ func (s Service) round(salary float64, place int) float64 {
 	return math.Round(salary*factor) / factor
 }
 
-func (s Service) CalculateSalaryAfterLate(salaryBase float64, late int, days ...int) float64 {
+func (s Service) CalculateSalaryAfterLate(salaryBase float64, late int, days ...int) (float64, error) {
 	var defaultDays int = 22
 
 	if len(days) > 0 && days[0] > 0 {
 		defaultDays = days[0]
 	}
 
+	if salaryBase < 0 {
+		return 0, ErrSalaryBaseNegative
+	}
+
 	salaryPerDay := s.SalaryPerDay(salaryBase, defaultDays)
 
-	return s.round(salaryBase-salaryPerDay*float64(late), 2)
+	return s.round(salaryBase-salaryPerDay*float64(late), 2), nil
 }

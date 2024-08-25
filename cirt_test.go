@@ -36,7 +36,7 @@ func TestCirt(t *testing.T) {
 			expected := 18000
 
 			// Act
-			result := service.CalculateSalaryAfterLate(salaryBase, late, days)
+			result, _ := service.CalculateSalaryAfterLate(salaryBase, late, days)
 
 			// Assert
 			if result != float64(expected) {
@@ -53,7 +53,7 @@ func TestCirt(t *testing.T) {
 			expected := 20000
 
 			// Act
-			result := service.CalculateSalaryAfterLate(salaryBase, late)
+			result, _ := service.CalculateSalaryAfterLate(salaryBase, late)
 
 			// Assert
 			if result != float64(expected) {
@@ -61,7 +61,7 @@ func TestCirt(t *testing.T) {
 			}
 		})
 
-		t.Run("Should not calculate salary base after late when salary base is more than one decimal places", func(t *testing.T) {
+		t.Run("Should calculate salary base after late when salary base is more than one decimal places", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
 			salaryBase := 22000.45
@@ -70,11 +70,26 @@ func TestCirt(t *testing.T) {
 			expected := 20000.41
 
 			// Act
-			result := service.CalculateSalaryAfterLate(salaryBase, late)
+			result, _ := service.CalculateSalaryAfterLate(salaryBase, late)
 
 			// Assert
 			if result != float64(expected) {
 				t.Errorf("Expeted %v, received %v", expected, result)
+			}
+		})
+
+		t.Run("Should not calculate salary base after late when salary base is negative", func(t *testing.T) {
+			// Arrange
+			service := cirt.NewService()
+			salaryBase := -22000.45
+			late := 2
+
+			// Act
+			_, err := service.CalculateSalaryAfterLate(salaryBase, late)
+
+			// Assert
+			if err != cirt.ErrSalaryBaseNegative {
+				t.Error(err)
 			}
 		})
 
