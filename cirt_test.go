@@ -95,4 +95,38 @@ func TestCirt(t *testing.T) {
 
 	})
 
+	t.Run("Subsidio de Alimentação", func(t *testing.T) {
+		t.Run("Should calculate subsidio de alimentação", func(t *testing.T) {
+			// Arrange
+			service := cirt.NewService()
+			subsidio := 1000.0
+			days := 20
+
+			expected := 20000
+
+			// Act
+			result := service.CalculoSubisiodio(subsidio, days)
+
+			// Assert
+			if result != float64(expected) {
+				t.Errorf("Expected %v, received %v", expected, result)
+			}
+		})
+
+		t.Run("Should calculate subsidio de alimentação when default days is 22", func(t *testing.T) {
+			// Arrange
+			service := cirt.NewService()
+			subsidio := 1000.0
+
+			expected := 22000
+
+			// Act
+			result := service.CalculoSubisiodio(subsidio)
+
+			// Assert
+			if result != float64(expected) {
+				t.Errorf("Expected %v, received %v", expected, result)
+			}
+		})
+	})
 }

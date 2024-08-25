@@ -39,3 +39,13 @@ func (s Service) CalculateSalaryAfterLate(salaryBase float64, late int, days ...
 
 	return s.round(salaryBase-salaryPerDay*float64(late), 2), nil
 }
+
+func (s Service) CalculoSubisiodio(subsidio float64, days ...int) float64 {
+	var defaultDays int = 22
+
+	if len(days) > 0 && days[0] > 0 {
+		defaultDays = days[0]
+	}
+
+	return subsidio * float64(defaultDays)
+}
