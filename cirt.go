@@ -7,7 +7,7 @@ import (
 
 var (
 	ErrSalaryBaseNegative = errors.New("Salary base cannot be negative")
-	ErrSubsidioNegative = errors.New("Subsidio cannot be negative")
+	ErrSubsidioNegative   = errors.New("Subsidio cannot be negative")
 )
 
 type Service struct{}
@@ -45,7 +45,7 @@ func (s Service) CalculateSalaryAfterLate(salaryBase float64, late int, days ...
 	return s.round(salaryBase-salaryPerDay*float64(late), 2), nil
 }
 
-func (s Service) CalculoSubisiodio(subsidio float64, days ...int) (float64, error) {
+func (s Service) CalculoSubisiodioAlimentacaoOuTransporte(subsidio float64, days ...int) (float64, error) {
 	var defaultDays int = 22
 
 	if len(days) > 0 && days[0] > 0 {
@@ -56,5 +56,10 @@ func (s Service) CalculoSubisiodio(subsidio float64, days ...int) (float64, erro
 		return 0, ErrSubsidioNegative
 	}
 
-	return  s.round(subsidio * float64(defaultDays), 2), nil
+	return s.round(subsidio*float64(defaultDays), 2), nil
+}
+
+func (s Service) CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo float64) float64 {
+	result := salaryBase + subsidioAlimentacao + subsidioTransPorte + premeo * 0.03
+	return s.round(result, 2)
 }

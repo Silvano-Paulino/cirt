@@ -95,8 +95,8 @@ func TestCirt(t *testing.T) {
 
 	})
 
-	t.Run("Subsidio de Alimentação", func(t *testing.T) {
-		t.Run("Should calculate subsidio de alimentação", func(t *testing.T) {
+	t.Run("Subsidio de Alimentação ou Transport", func(t *testing.T) {
+		t.Run("Should calculate subsidio", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
 			subsidio := 1000.0
@@ -105,7 +105,7 @@ func TestCirt(t *testing.T) {
 			expected := 20000
 
 			// Act
-			result, _ := service.CalculoSubisiodio(subsidio, days)
+			result, _ := service.CalculoSubisiodioAlimentacaoOuTransporte(subsidio, days)
 
 			// Assert
 			if result != float64(expected) {
@@ -113,7 +113,7 @@ func TestCirt(t *testing.T) {
 			}
 		})
 
-		t.Run("Should calculate subsidio de alimentação when default days is 22", func(t *testing.T) {
+		t.Run("Should calculate subsidio when default days is 22", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
 			subsidio := 1000.0
@@ -121,7 +121,7 @@ func TestCirt(t *testing.T) {
 			expected := 22000
 
 			// Act
-			result, _ := service.CalculoSubisiodio(subsidio)
+			result, _ := service.CalculoSubisiodioAlimentacaoOuTransporte(subsidio)
 
 			// Assert
 			if result != float64(expected) {
@@ -129,7 +129,7 @@ func TestCirt(t *testing.T) {
 			}
 		})
 
-		t.Run("Should calculate subsidio de alimentação with more than one decimal places", func(t *testing.T) {
+		t.Run("Should calculate subsidio with more than one decimal places", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
 			subsidio := 1000.459
@@ -137,7 +137,7 @@ func TestCirt(t *testing.T) {
 			expected := 22010.10
 
 			// Act
-			result, _ := service.CalculoSubisiodio(subsidio)
+			result, _ := service.CalculoSubisiodioAlimentacaoOuTransporte(subsidio)
 
 			// Assert
 			if result != float64(expected) {
@@ -145,21 +145,19 @@ func TestCirt(t *testing.T) {
 			}
 		})
 
-		t.Run("Should not calculate subsidio de alimentação when subsidio is negative", func(t *testing.T) {
+		t.Run("Should not calculate subsidio when subsidio is negative", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
 			subsidio := -1000.0
 
 			// Act
-			_, err := service.CalculoSubisiodio(subsidio)
+			_, err := service.CalculoSubisiodioAlimentacaoOuTransporte(subsidio)
 
 			// Assert
 			if err != cirt.ErrSubsidioNegative {
 				t.Error(err)
 			}
 		})
-
-		
 	})
 
 	t.Run("should calculate excesso", func(t *testing.T) {
@@ -169,7 +167,7 @@ func TestCirt(t *testing.T) {
 
 		expected := 14000
 
-		result, _ := service.CalculoSubisiodio(subsidio)
+		result, _ := service.CalculoSubisiodioAlimentacaoOuTransporte(subsidio)
 
 		// Act
 		execesso := service.Excesso(result)
@@ -178,5 +176,45 @@ func TestCirt(t *testing.T) {
 		if execesso != float64(expected) {
 			t.Errorf("Expected %v, received %v", expected, result)
 		}
+	})
+
+	t.Run("Social Segurance", func(t *testing.T) {
+		t.Run("Should calculate inss", func(t *testing.T) {
+			// Arrange
+			service := cirt.NewService()
+			salaryBase := 20000.0
+			subsidioAlimentacao := 1000.0
+			subsidioTransPorte := 1000.0
+			premeo := 5000.0
+
+			expected := 22150
+
+			// Act
+			result := service.CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo)
+
+			// assert
+			if result != float64(expected) {
+				t.Errorf("Expected %v, received %v", expected, result)
+			}
+		})
+
+		t.Run("Should calculate inss with more than one decimal places", func(t *testing.T) {
+			// Arrange
+			service := cirt.NewService()
+			salaryBase := 20000.256
+			subsidioAlimentacao := 1000.0
+			subsidioTransPorte := 1000.0
+			premeo := 5000.0
+
+			expected := 22150.26
+
+			// Act
+			result := service.CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo)
+
+			// assert
+			if result != float64(expected) {
+				t.Errorf("Expected %v, received %v", expected, result)
+			}
+		})
 	})
 }
