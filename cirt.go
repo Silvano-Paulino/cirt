@@ -12,5 +12,5 @@ func (s Service) SalaryPerDay(salaryBase float64, days int) float64 {
 
 func (s Service) CalculateSalaryAfterLate(salaryBase float64, days, late int) float64 {
 	salaryPerDay := s.SalaryPerDay(salaryBase, days)
-	return salaryPerDay * float64(late)
+	return salaryBase - salaryPerDay * float64(late)
 }

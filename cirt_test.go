@@ -33,7 +33,7 @@ func TestCirt(t *testing.T) {
 			days := 20
 			late := 2
 
-			expected := 2000
+			expected := 18000
 
 			// Act
 			result := service.CalculateSalaryAfterLate(salaryBase, days, late)
