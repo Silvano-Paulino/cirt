@@ -36,7 +36,24 @@ func TestCirt(t *testing.T) {
 			expected := 18000
 
 			// Act
-			result := service.CalculateSalaryAfterLate(salaryBase, days, late)
+			result := service.CalculateSalaryAfterLate(salaryBase, late, days)
+
+			// Assert
+			if result != float64(expected) {
+				t.Errorf("Expeted %v, received %v", expected, result)
+			}
+		})
+
+		t.Run("Should calculate salary base after late when default days is 22", func(t *testing.T) {
+			// Arrange
+			service := cirt.NewService()
+			salaryBase := 22000.0
+			late := 2
+
+			expected := 20000
+
+			// Act
+			result := service.CalculateSalaryAfterLate(salaryBase, late)
 
 			// Assert
 			if result != float64(expected) {
