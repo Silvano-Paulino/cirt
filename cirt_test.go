@@ -128,5 +128,27 @@ func TestCirt(t *testing.T) {
 				t.Errorf("Expected %v, received %v", expected, result)
 			}
 		})
+
+		
+
+		
+	})
+
+	t.Run("should calculate excesso", func(t *testing.T) {
+		// Arrange
+		service := cirt.NewService()
+		subsidio := 2000.0
+
+		expected := 14000
+
+		result := service.CalculoSubisiodio(subsidio)
+
+		// Act
+		execesso := service.Excesso(result)
+
+		// Assert
+		if execesso != float64(expected) {
+			t.Errorf("Expected %v, received %v", expected, result)
+		}
 	})
 }

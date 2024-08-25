@@ -15,6 +15,10 @@ func NewService() Service {
 	return Service{}
 }
 
+func (s Service) Excesso(subsidio float64) float64 {
+	return subsidio - 30000
+}
+
 func (s Service) SalaryPerDay(salaryBase float64, days int) float64 {
 	return salaryBase / float64(days)
 }
@@ -47,5 +51,7 @@ func (s Service) CalculoSubisiodio(subsidio float64, days ...int) float64 {
 		defaultDays = days[0]
 	}
 
-	return subsidio * float64(defaultDays)
+	result := subsidio * float64(defaultDays)
+
+	return result
 }
