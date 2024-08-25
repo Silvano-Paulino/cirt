@@ -190,7 +190,7 @@ func TestCirt(t *testing.T) {
 			expected := 22150
 
 			// Act
-			result := service.CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo)
+			result, _ := service.CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo)
 
 			// assert
 			if result != float64(expected) {
@@ -209,11 +209,28 @@ func TestCirt(t *testing.T) {
 			expected := 22150.26
 
 			// Act
-			result := service.CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo)
+			result, _ := service.CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo)
 
 			// assert
 			if result != float64(expected) {
 				t.Errorf("Expected %v, received %v", expected, result)
+			}
+		})
+
+		t.Run("Should not calculate inss when salary base is negative", func(t *testing.T) {
+			// Arrange
+			service := cirt.NewService()
+			salaryBase := -20000.0
+			subsidioAlimentacao := 1000.0
+			subsidioTransPorte := 1000.0
+			premeo := 5000.0
+
+			// Act
+			_, err := service.CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo)
+
+			// assert
+			if err != cirt.ErrSalaryBaseNegative {
+				t.Error(err)
 			}
 		})
 	})

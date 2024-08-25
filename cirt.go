@@ -59,7 +59,13 @@ func (s Service) CalculoSubisiodioAlimentacaoOuTransporte(subsidio float64, days
 	return s.round(subsidio*float64(defaultDays), 2), nil
 }
 
-func (s Service) CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo float64) float64 {
+func (s Service) CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo float64) (float64, error) {
+
+	if salaryBase < 0 {
+		return 0, ErrSalaryBaseNegative
+	}
+
 	result := salaryBase + subsidioAlimentacao + subsidioTransPorte + premeo * 0.03
-	return s.round(result, 2)
+
+	return s.round(result, 2), nil
 }
