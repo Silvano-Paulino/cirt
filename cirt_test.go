@@ -61,6 +61,23 @@ func TestCirt(t *testing.T) {
 			}
 		})
 
+		t.Run("Should not calculate salary base after late when salary base is more than one decimal places", func(t *testing.T) {
+			// Arrange
+			service := cirt.NewService()
+			salaryBase := 22000.45
+			late := 2
+
+			expected := 20000.41
+
+			// Act
+			result := service.CalculateSalaryAfterLate(salaryBase, late)
+
+			// Assert
+			if result != float64(expected) {
+				t.Errorf("Expeted %v, received %v", expected, result)
+			}
+		})
+
 	})
 
 }
