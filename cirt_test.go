@@ -105,7 +105,7 @@ func TestCirt(t *testing.T) {
 			expected := 20000
 
 			// Act
-			result := service.CalculoSubisiodio(subsidio, days)
+			result, _ := service.CalculoSubisiodio(subsidio, days)
 
 			// Assert
 			if result != float64(expected) {
@@ -121,7 +121,7 @@ func TestCirt(t *testing.T) {
 			expected := 22000
 
 			// Act
-			result := service.CalculoSubisiodio(subsidio)
+			result, _ := service.CalculoSubisiodio(subsidio)
 
 			// Assert
 			if result != float64(expected) {
@@ -129,7 +129,19 @@ func TestCirt(t *testing.T) {
 			}
 		})
 
-		
+		t.Run("Should not calculate subsidio de alimentação when subsidio is negative", func(t *testing.T) {
+			// Arrange
+			service := cirt.NewService()
+			subsidio := -1000.0
+
+			// Act
+			_, err := service.CalculoSubisiodio(subsidio)
+
+			// Assert
+			if err != cirt.ErrSubsidioNegative {
+				t.Error(err)
+			}
+		})
 
 		
 	})
@@ -141,7 +153,7 @@ func TestCirt(t *testing.T) {
 
 		expected := 14000
 
-		result := service.CalculoSubisiodio(subsidio)
+		result, _ := service.CalculoSubisiodio(subsidio)
 
 		// Act
 		execesso := service.Excesso(result)
