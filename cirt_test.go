@@ -190,7 +190,7 @@ func TestCirt(t *testing.T) {
 			expected := 22150
 
 			// Act
-			result, _ := service.CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo)
+			result := service.CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo)
 
 			// assert
 			if result != float64(expected) {
@@ -209,7 +209,7 @@ func TestCirt(t *testing.T) {
 			expected := 22150.26
 
 			// Act
-			result, _ := service.CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo)
+			result := service.CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo)
 
 			// assert
 			if result != float64(expected) {
@@ -217,26 +217,10 @@ func TestCirt(t *testing.T) {
 			}
 		})
 
-		t.Run("Should not calculate inss when salary base is negative", func(t *testing.T) {
-			// Arrange
-			service := cirt.NewService()
-			salaryBase := -20000.0
-			subsidioAlimentacao := 1000.0
-			subsidioTransPorte := 1000.0
-			premeo := 5000.0
-
-			// Act
-			_, err := service.CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo)
-
-			// assert
-			if err != cirt.ErrSalaryBaseNegative {
-				t.Error(err)
-			}
-		})
 	})
 
 	t.Run("Imposto sobre Rendimento de Trabalho (IRT)", func(t *testing.T) {
-		t.Run("Should calculate materia colecctavel", func(t *testing.T) {
+		t.Run("Should calculate materia colectavel", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
 			salarybase := 20000.0
@@ -252,7 +236,24 @@ func TestCirt(t *testing.T) {
 			if result != float64(expected) {
 				t.Errorf("Expected %v, received %v", expected, result)
 			} 
+		})
 
+		t.Run("Should calculate materia colectavel with more than one decimal places", func(t *testing.T) {
+			// Arrange
+			service := cirt.NewService()
+			salarybase := 20000.564
+			sujeicaoIrt := 16000.0
+			inss := 20000.0
+
+			expected := 16000.56
+
+			// Act
+			result := service.CalculateMateriaColectavel(salarybase, sujeicaoIrt, inss)
+
+			// Assert
+			if result != float64(expected) {
+				t.Errorf("Expected %v, received %v", expected, result)
+			}
 		})
 	})
 }
