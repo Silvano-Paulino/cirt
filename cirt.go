@@ -60,10 +60,19 @@ func (s Service) CalculoSubisiodioAlimentacaoOuTransporte(subsidio float64, days
 }
 
 func (s Service) CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo float64) float64 {
-	result := salaryBase + subsidioAlimentacao + subsidioTransPorte + premeo * 0.03
+	result := salaryBase + subsidioAlimentacao + subsidioTransPorte + premeo*0.03
 	return s.round(result, 2)
 }
 
 func (s Service) CalculateMateriaColectavel(salaryBase, sujeicaoIrt, inss float64) float64 {
-	return s.round(salaryBase + sujeicaoIrt - inss, 2)
+	return s.round(salaryBase+sujeicaoIrt-inss, 2)
+}
+
+func (s Service) CalculateIRT(mc float64) (float64, error) {
+	data, err := Get(mc)
+	if err != nil {
+		return 0, err
+	}
+
+	return data.ParcelaFixa + mc - data.Excesso * data.Taxa, nil
 }

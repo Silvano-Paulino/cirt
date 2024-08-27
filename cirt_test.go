@@ -235,7 +235,7 @@ func TestCirt(t *testing.T) {
 			// Assert
 			if result != float64(expected) {
 				t.Errorf("Expected %v, received %v", expected, result)
-			} 
+			}
 		})
 
 		t.Run("Should calculate materia colectavel with more than one decimal places", func(t *testing.T) {
@@ -253,6 +253,30 @@ func TestCirt(t *testing.T) {
 			// Assert
 			if result != float64(expected) {
 				t.Errorf("Expected %v, received %v", expected, result)
+			}
+		})
+
+		t.Run("Should calculate IRT", func(t *testing.T) {
+			// Arrange
+			service := cirt.NewService()
+			salarybase := 20000.564
+			sujeicaoIrt := 16000.0
+			inss := 20000.0
+
+			mc := service.CalculateMateriaColectavel(salarybase, sujeicaoIrt, inss)
+
+			expected := 16000.56
+
+			// Act
+			result, err := service.CalculateIRT(mc)
+
+			// Assert
+			if result != float64(expected) {
+				t.Errorf("Expected %v, received %v", expected, result)
+			}
+
+			if err != nil {
+				t.Error(err)
 			}
 		})
 	})
