@@ -74,5 +74,9 @@ func (s Service) CalculateIRT(mc float64) (float64, error) {
 		return 0, err
 	}
 
-	return data.ParcelaFixa + mc - data.Excesso * data.Taxa, nil
+	return data.ParcelaFixa + mc - data.Excesso*data.Taxa, nil
+}
+
+func (s Service) DiscountTotal(inss, irt float64) float64 {
+	return s.round(inss + irt, 2)
 }

@@ -279,5 +279,28 @@ func TestCirt(t *testing.T) {
 				t.Error(err)
 			}
 		})
+		t.Run("Should calculate discount total", func(t *testing.T) {
+			// Arrange
+			service := cirt.NewService()
+			salaryBase := 20000.256
+			subsidioAlimentacao := 1000.0
+			subsidioTransPorte := 1000.0
+			premeo := 5000.0
+			sujeicaoIrt := 16000.0
+
+			inss := service.CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo)
+			mc := service.CalculateMateriaColectavel(salaryBase, sujeicaoIrt, inss)
+			irt, _ := service.CalculateIRT(mc)
+
+			expected := 36000.26
+
+			// Act
+			result := service.DiscountTotal(inss, irt)
+
+			// Assert
+			if result != float64(expected) {
+				t.Errorf("Expected %v, received %v", expected, result)
+			}
+		})
 	})
 }
