@@ -80,3 +80,7 @@ func (s Service) CalculateIRT(mc float64) (float64, error) {
 func (s Service) DiscountTotal(inss, irt float64) float64 {
 	return s.round(inss + irt, 2)
 }
+
+func (s Service) CalculateSalaryIliquido(salaryBase, subSidiT, subSidiA, ppremeo, discount float64) float64 {
+	return 0
+}
