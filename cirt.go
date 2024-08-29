@@ -6,8 +6,8 @@ import (
 )
 
 var (
-	ErrSalaryBaseNegative = errors.New("Salary base cannot be negative")
-	ErrSubsidioNegative   = errors.New("Subsidio cannot be negative")
+	ErrSalaryBaseNegative = errors.New("salary base cannot be negative")
+	ErrSubsidioNegative   = errors.New("subsidio cannot be negative")
 )
 
 type Service struct{}
@@ -24,9 +24,8 @@ func (s Service) SalaryPerDay(salaryBase float64, days int) float64 {
 	return salaryBase / float64(days)
 }
 
-func (s Service) round(salary float64, place int) float64 {
-	factor := math.Pow(10, float64(place))
-	return math.Round(salary*factor) / factor
+func (s Service) round(salary float64) float64 {
+	return math.Round(salary*100) / 100
 }
 
 func (s Service) CalculateSalaryAfterLate(salaryBase float64, late int, days ...int) (float64, error) {
@@ -42,7 +41,7 @@ func (s Service) CalculateSalaryAfterLate(salaryBase float64, late int, days ...
 
 	salaryPerDay := s.SalaryPerDay(salaryBase, defaultDays)
 
-	return s.round(salaryBase-salaryPerDay*float64(late), 2), nil
+	return s.round(salaryBase-salaryPerDay*float64(late)), nil
 }
 
 func (s Service) CalculoSubisiodioAlimentacaoOuTransporte(subsidio float64, days ...int) (float64, error) {
@@ -56,16 +55,16 @@ func (s Service) CalculoSubisiodioAlimentacaoOuTransporte(subsidio float64, days
 		return 0, ErrSubsidioNegative
 	}
 
-	return s.round(subsidio*float64(defaultDays), 2), nil
+	return s.round(subsidio*float64(defaultDays)), nil
 }
 
 func (s Service) CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo float64) float64 {
 	result := salaryBase + subsidioAlimentacao + subsidioTransPorte + premeo*0.03
-	return s.round(result, 2)
+	return s.round(result)
 }
 
 func (s Service) CalculateMateriaColectavel(salaryBase, sujeicaoIrt, inss float64) float64 {
-	return s.round(salaryBase+sujeicaoIrt-inss, 2)
+	return s.round(salaryBase+sujeicaoIrt-inss)
 }
 
 func (s Service) CalculateIRT(mc float64) (float64, error) {
@@ -78,9 +77,9 @@ func (s Service) CalculateIRT(mc float64) (float64, error) {
 }
 
 func (s Service) DiscountTotal(inss, irt float64) float64 {
-	return s.round(inss + irt, 2)
+	return s.round(inss+irt)
 }
 
-func (s Service) CalculateSalaryIliquido(salaryBase, subSidiT, subSidiA, ppremeo, discount float64) float64 {
-	return 0
+func (s Service) CalculateSalaryLiquido(salaryBase, subSidiT, subSidiA, premeo, discount float64) float64 {
+	return s.round(salaryBase + subSidiA + subSidiT + premeo - discount)
 }

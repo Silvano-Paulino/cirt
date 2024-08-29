@@ -303,23 +303,23 @@ func TestCirt(t *testing.T) {
 			}
 		})
 
-		t.Run("Should calculate salary iliquidado", func(t *testing.T) {
+		t.Run("Should calculate salary liquidado", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
 			salaryBase := 20000.256
 			subSidiT := 1000.0
 			subSidiA := 1000.0
 			premeo := 5000.0
-			sujeicaoIrt := 16000.0
+			sujeicaoIrt := 0.0
 			inss := service.CalculateSocialSegurance(salaryBase, subSidiA, subSidiT, premeo)
 			mc := service.CalculateMateriaColectavel(salaryBase, sujeicaoIrt, inss)
 			irt, _ := service.CalculateIRT(mc)
 			discount := service.DiscountTotal(inss, irt)
 
-			expected := 0
+			expected := 164752.25
 
 			// Act
-			result := service.CalculateSalaryIliquido(salaryBase, subSidiT, subSidiA, premeo, discount)
+			result := service.CalculateSalaryLiquido(salaryBase, subSidiT, subSidiA, premeo, discount)
 
 			// Assert
 			if result != float64(expected) {
