@@ -25,7 +25,7 @@ func (s Service) Excesso(subsidio float64) float64 {
 	return subsidio - 30000
 }
 
-func (s Service) SalaryPerDay(salaryBase float64, days int) float64 {
+func (s Service) salaryPerDay(salaryBase float64, days int) float64 {
 	return salaryBase / float64(days)
 }
 
@@ -44,7 +44,7 @@ func (s Service) CalculateSalaryAfterLate(salaryBase float64, late int, days ...
 		return 0, ErrSalaryBaseNegative
 	}
 
-	salaryPerDay := s.SalaryPerDay(salaryBase, defaultDays)
+	salaryPerDay := s.salaryPerDay(salaryBase, defaultDays)
 
 	return s.round(salaryBase - salaryPerDay*float64(late)), nil
 }
