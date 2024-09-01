@@ -53,5 +53,5 @@ func main() {
 
 	print(salaryBase, salary, subSidio_a, subSidio_a, premeo, inss, irt, salaryLiquido)
 
-	Cli(salaryBase, subSidioA, subSidioT, premeo, late, days)
+	cli(salaryBase, subSidioA, subSidioT, premeo, late, days)
 }
