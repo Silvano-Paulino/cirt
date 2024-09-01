@@ -1,4 +1,4 @@
-package cirt_test
+package main_test
 
 import (
 	"testing"
@@ -105,7 +105,7 @@ func TestCirt(t *testing.T) {
 			expected := 20000
 
 			// Act
-			result, _ := service.CalculoSubisiodioAlimentacaoOuTransporte(subsidio, days)
+			result, _ := service.CalculoSubsiodio(subsidio, days)
 
 			// Assert
 			if result != float64(expected) {
@@ -121,7 +121,7 @@ func TestCirt(t *testing.T) {
 			expected := 22000
 
 			// Act
-			result, _ := service.CalculoSubisiodioAlimentacaoOuTransporte(subsidio)
+			result, _ := service.CalculoSubsiodio(subsidio)
 
 			// Assert
 			if result != float64(expected) {
@@ -137,7 +137,7 @@ func TestCirt(t *testing.T) {
 			expected := 22010.10
 
 			// Act
-			result, _ := service.CalculoSubisiodioAlimentacaoOuTransporte(subsidio)
+			result, _ := service.CalculoSubsiodio(subsidio)
 
 			// Assert
 			if result != float64(expected) {
@@ -151,7 +151,7 @@ func TestCirt(t *testing.T) {
 			subsidio := -1000.0
 
 			// Act
-			_, err := service.CalculoSubisiodioAlimentacaoOuTransporte(subsidio)
+			_, err := service.CalculoSubsiodio(subsidio)
 
 			// Assert
 			if err != cirt.ErrSubsidioNegative {
@@ -167,7 +167,25 @@ func TestCirt(t *testing.T) {
 
 		expected := 14000
 
-		result, _ := service.CalculoSubisiodioAlimentacaoOuTransporte(subsidio)
+		result, _ := service.CalculoSubsiodio(subsidio)
+
+		// Act
+		execesso := service.Excesso(result)
+
+		// Assert
+		if execesso != float64(expected) {
+			t.Errorf("Expected %v, received %v", expected, result)
+		}
+	})
+
+	t.Run("Should not calculate excesso when subsidio is less than 30000", func(t *testing.T) {
+		// Arrange
+		service := cirt.NewService()
+		subsidio := 1000.0
+
+		expected := 0
+
+		result, _ := service.CalculoSubsiodio(subsidio)
 
 		// Act
 		execesso := service.Excesso(result)
@@ -303,7 +321,7 @@ func TestCirt(t *testing.T) {
 			}
 		})
 
-		t.Run("Should calculate salary liquidado", func(t *testing.T) {
+		t.Run("Should calculate salary liquido", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
 			salaryBase := 20000.256

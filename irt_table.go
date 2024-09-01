@@ -1,4 +1,4 @@
-package cirt
+package main
 
 import "errors"
 
@@ -37,5 +37,5 @@ func Get(materiaColectavel float64) (IrtTable, error) {
 		}
 	}
 
-	return IrtTable{}, errors.New("Not found")
+	return IrtTable{}, errors.New("not found")
 }

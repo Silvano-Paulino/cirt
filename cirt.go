@@ -1,4 +1,4 @@
-package cirt
+package main
 
 import (
 	"errors"
@@ -17,6 +17,11 @@ func NewService() Service {
 }
 
 func (s Service) Excesso(subsidio float64) float64 {
+	
+	if subsidio < 30000 {
+		return 0
+	}
+
 	return subsidio - 30000
 }
 
@@ -41,10 +46,10 @@ func (s Service) CalculateSalaryAfterLate(salaryBase float64, late int, days ...
 
 	salaryPerDay := s.SalaryPerDay(salaryBase, defaultDays)
 
-	return s.round(salaryBase-salaryPerDay*float64(late)), nil
+	return s.round(salaryBase - salaryPerDay*float64(late)), nil
 }
 
-func (s Service) CalculoSubisiodioAlimentacaoOuTransporte(subsidio float64, days ...int) (float64, error) {
+func (s Service) CalculoSubsiodio(subsidio float64, days ...int) (float64, error) {
 	var defaultDays int = 22
 
 	if len(days) > 0 && days[0] > 0 {
@@ -55,7 +60,7 @@ func (s Service) CalculoSubisiodioAlimentacaoOuTransporte(subsidio float64, days
 		return 0, ErrSubsidioNegative
 	}
 
-	return s.round(subsidio*float64(defaultDays)), nil
+	return s.round(subsidio * float64(defaultDays)), nil
 }
 
 func (s Service) CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo float64) float64 {
@@ -64,7 +69,7 @@ func (s Service) CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsi
 }
 
 func (s Service) CalculateMateriaColectavel(salaryBase, sujeicaoIrt, inss float64) float64 {
-	return s.round(salaryBase+sujeicaoIrt-inss)
+	return s.round(salaryBase + sujeicaoIrt - inss)
 }
 
 func (s Service) CalculateIRT(mc float64) (float64, error) {
@@ -77,7 +82,7 @@ func (s Service) CalculateIRT(mc float64) (float64, error) {
 }
 
 func (s Service) DiscountTotal(inss, irt float64) float64 {
-	return s.round(inss+irt)
+	return s.round(inss + irt)
 }
 
 func (s Service) CalculateSalaryLiquido(salaryBase, subSidiT, subSidiA, premeo, discount float64) float64 {
