@@ -1,6 +1,8 @@
 ## Calculo do IRT
 ### Instrução para executar o programa
 
+Este projecto tem o proposito de facilitar as empresas em calcular o IRT de cada funcionário. Para construir a aplicação a base fundamental foi o conceito de Testing Driven Development, que é abordagem que consistem em criar a aplicação apartir dos testes, boas práticas de pprogramação como o KISS, DRY e SRP.
+
 Para que a aplicação seja executada, é necessário gerar o executável no seu terminal de preferência. Por exemplo: 
 
 Para todas as distro Linux:
