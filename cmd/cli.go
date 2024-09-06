@@ -19,7 +19,7 @@ func NewCirt() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 
 			if invalid := Validate(salaryBase, days, late, subSidioA, subSidioT, premeo); !invalid {
-				panic("invalid input")
+				panic(invalid)
 			}
 
 			service := cirt.NewService()
