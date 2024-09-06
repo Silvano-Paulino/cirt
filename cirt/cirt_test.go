@@ -1,9 +1,9 @@
-package main_test
+package cirt_test
 
 import (
 	"testing"
 
-	cirt "github.com/silvano-paulino"
+	"github.com/silvano-paulino/cirt"
 )
 
 func TestCirt(t *testing.T) {
