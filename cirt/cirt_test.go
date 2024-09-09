@@ -279,8 +279,8 @@ func TestCirt(t *testing.T) {
 			sujeicaoIrt := 16000.0
 
 			inss := service.CalculateSocialSegurance(salaryBase, subsidyFood, subsidyTransPort, premeo)
-			mc := service.CalculateColletableMaterial(salaryBase, sujeicaoIrt, inss)
-			irt, _ := service.CalculateIRT(mc)
+			colletableMaterial := service.CalculateColletableMaterial(salaryBase, sujeicaoIrt, inss)
+			irt, _ := service.CalculateIRT(colletableMaterial)
 
 			expected := 36000.26
 
