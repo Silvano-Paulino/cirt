@@ -9,17 +9,17 @@ import (
 func TestCirt(t *testing.T) {
 	t.Run("Salary base after late", func(t *testing.T) {
 
-		t.Run("Should calculate salary base after late", func(t *testing.T) {
+		t.Run("Should calculate salary base after delay", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
 			salaryBase := 20000.0
 			days := 20
-			late := 2
+			delay := 2
 
 			expected := 18000
 
 			// Act
-			result, _ := service.CalculateSalaryAfterLate(salaryBase, late, days)
+			result, _ := service.CalculateSalaryAfterDelay(salaryBase, delay, days)
 
 			// Assert
 			if result != float64(expected) {
@@ -31,12 +31,12 @@ func TestCirt(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
 			salaryBase := 22000.0
-			late := 2
+			delay := 2
 
 			expected := 20000
 
 			// Act
-			result, _ := service.CalculateSalaryAfterLate(salaryBase, late)
+			result, _ := service.CalculateSalaryAfterDelay(salaryBase, delay)
 
 			// Assert
 			if result != float64(expected) {
@@ -48,12 +48,12 @@ func TestCirt(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
 			salaryBase := 22000.45
-			late := 2
+			delay := 2
 
 			expected := 20000.41
 
 			// Act
-			result, _ := service.CalculateSalaryAfterLate(salaryBase, late)
+			result, _ := service.CalculateSalaryAfterDelay(salaryBase, delay)
 
 			// Assert
 			if result != float64(expected) {
@@ -65,10 +65,10 @@ func TestCirt(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
 			salaryBase := -22000.45
-			late := 2
+			delay := 2
 
 			// Act
-			_, err := service.CalculateSalaryAfterLate(salaryBase, late)
+			_, err := service.CalculateSalaryAfterDelay(salaryBase, delay)
 
 			// Assert
 			if err != cirt.ErrSalaryBaseNegative {
@@ -77,140 +77,132 @@ func TestCirt(t *testing.T) {
 		})
 
 	})
-
-	t.Run("Subsidio de Alimentação ou Transport", func(t *testing.T) {
-		t.Run("Should calculate subsidio", func(t *testing.T) {
+	t.Run("subsidys", func(t *testing.T) {
+		t.Run("Should calculate subsidy", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
-			subsidio := 1000.0
+			subsidy := 1000.0
 			days := 20
 
 			expected := 20000
 
 			// Act
-			result, _ := service.CalculoSubsiodio(subsidio, days)
+			result, _ := service.CalculateSubsidy(subsidy, days)
 
 			// Assert
 			if result != float64(expected) {
 				t.Errorf("Expected %v, received %v", expected, result)
 			}
 		})
-
-		t.Run("Should calculate subsidio when default days is 22", func(t *testing.T) {
+		t.Run("Should calculate subsidy when default days is 22", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
-			subsidio := 1000.0
+			subsidy := 1000.0
 
 			expected := 22000
 
 			// Act
-			result, _ := service.CalculoSubsiodio(subsidio)
+			result, _ := service.CalculateSubsidy(subsidy)
 
 			// Assert
 			if result != float64(expected) {
 				t.Errorf("Expected %v, received %v", expected, result)
 			}
 		})
-
-		t.Run("Should calculate subsidio with more than one decimal places", func(t *testing.T) {
+		t.Run("Should calculate subsidy with more than one decimal places", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
-			subsidio := 1000.459
+			subsidy := 1000.459
 
 			expected := 22010.10
 
 			// Act
-			result, _ := service.CalculoSubsiodio(subsidio)
+			result, _ := service.CalculateSubsidy(subsidy)
 
 			// Assert
 			if result != float64(expected) {
 				t.Errorf("Expected %v, received %v", expected, result)
 			}
 		})
-
-		t.Run("Should not calculate subsidio when subsidio is negative", func(t *testing.T) {
+		t.Run("Should not calculate subsidy when subsidy is negative", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
-			subsidio := -1000.0
+			subsidy := -1000.0
 
 			// Act
-			_, err := service.CalculoSubsiodio(subsidio)
+			_, err := service.CalculateSubsidy(subsidy)
 
 			// Assert
-			if err != cirt.ErrSubsidioNegative {
+			if err != cirt.ErrSubsidyNegative {
 				t.Error(err)
 			}
 		})
 	})
-
-	t.Run("should calculate excesso", func(t *testing.T) {
+	t.Run("should calculate excess", func(t *testing.T) {
 		// Arrange
 		service := cirt.NewService()
-		subsidio := 2000.0
+		subsidy := 2000.0
 
 		expected := 14000
 
-		result, _ := service.CalculoSubsiodio(subsidio)
+		result, _ := service.CalculateSubsidy(subsidy)
 
 		// Act
-		execesso := service.Excesso(result)
+		excess := service.Excess(result)
 
 		// Assert
-		if execesso != float64(expected) {
+		if excess != float64(expected) {
 			t.Errorf("Expected %v, received %v", expected, result)
 		}
 	})
-
-	t.Run("Should not calculate excesso when subsidio is less than 30000", func(t *testing.T) {
+	t.Run("Should not calculate excess when subsidy is less than 30000", func(t *testing.T) {
 		// Arrange
 		service := cirt.NewService()
-		subsidio := 1000.0
+		subsidy := 1000.0
 
 		expected := 0
 
-		result, _ := service.CalculoSubsiodio(subsidio)
+		result, _ := service.CalculateSubsidy(subsidy)
 
 		// Act
-		execesso := service.Excesso(result)
+		excess := service.Excess(result)
 
 		// Assert
-		if execesso != float64(expected) {
+		if excess != float64(expected) {
 			t.Errorf("Expected %v, received %v", expected, result)
 		}
 	})
-
 	t.Run("Social Segurance", func(t *testing.T) {
 		t.Run("Should calculate inss", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
 			salaryBase := 20000.0
-			subsidioAlimentacao := 1000.0
-			subsidioTransPorte := 1000.0
+			subsidyFood := 1000.0
+			subsidyTransPort := 1000.0
 			premeo := 5000.0
 
 			expected := 22150
 
 			// Act
-			result := service.CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo)
+			result := service.CalculateSocialSegurance(salaryBase, subsidyFood, subsidyTransPort, premeo)
 
 			// assert
 			if result != float64(expected) {
 				t.Errorf("Expected %v, received %v", expected, result)
 			}
 		})
-
 		t.Run("Should calculate inss with more than one decimal places", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
 			salaryBase := 20000.256
-			subsidioAlimentacao := 1000.0
-			subsidioTransPorte := 1000.0
+			subsidyFood := 1000.0
+			subsidyTransPort := 1000.0
 			premeo := 5000.0
 
 			expected := 22150.26
 
 			// Act
-			result := service.CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo)
+			result := service.CalculateSocialSegurance(salaryBase, subsidyFood, subsidyTransPort, premeo)
 
 			// assert
 			if result != float64(expected) {
@@ -219,9 +211,8 @@ func TestCirt(t *testing.T) {
 		})
 
 	})
-
-	t.Run("Imposto sobre Rendimento de Trabalho (IRT)", func(t *testing.T) {
-		t.Run("Should calculate materia colectavel", func(t *testing.T) {
+	t.Run("IRT", func(t *testing.T) {
+		t.Run("Should calculate colletable material", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
 			salarybase := 20000.0
@@ -231,15 +222,14 @@ func TestCirt(t *testing.T) {
 			expected := 16000.0
 
 			// Act
-			result := service.CalculateMateriaColectavel(salarybase, sujeicaoIrt, inss)
+			result := service.CalculateColletableMaterial(salarybase, sujeicaoIrt, inss)
 
 			// Assert
 			if result != float64(expected) {
 				t.Errorf("Expected %v, received %v", expected, result)
 			}
 		})
-
-		t.Run("Should calculate materia colectavel with more than one decimal places", func(t *testing.T) {
+		t.Run("Should calculate colletable material with more than one decimal places", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
 			salarybase := 20000.564
@@ -249,14 +239,13 @@ func TestCirt(t *testing.T) {
 			expected := 16000.56
 
 			// Act
-			result := service.CalculateMateriaColectavel(salarybase, sujeicaoIrt, inss)
+			result := service.CalculateColletableMaterial(salarybase, sujeicaoIrt, inss)
 
 			// Assert
 			if result != float64(expected) {
 				t.Errorf("Expected %v, received %v", expected, result)
 			}
 		})
-
 		t.Run("Should calculate IRT", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
@@ -264,12 +253,12 @@ func TestCirt(t *testing.T) {
 			sujeicaoIrt := 16000.0
 			inss := 20000.0
 
-			mc := service.CalculateMateriaColectavel(salarybase, sujeicaoIrt, inss)
+			colletableMaterial := service.CalculateColletableMaterial(salarybase, sujeicaoIrt, inss)
 
 			expected := 16000.56
 
 			// Act
-			result, err := service.CalculateIRT(mc)
+			result, err := service.CalculateIRT(colletableMaterial)
 
 			// Assert
 			if result != float64(expected) {
@@ -284,13 +273,13 @@ func TestCirt(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
 			salaryBase := 20000.256
-			subsidioAlimentacao := 1000.0
-			subsidioTransPorte := 1000.0
+			subsidyFood := 1000.0
+			subsidyTransPort := 1000.0
 			premeo := 5000.0
 			sujeicaoIrt := 16000.0
 
-			inss := service.CalculateSocialSegurance(salaryBase, subsidioAlimentacao, subsidioTransPorte, premeo)
-			mc := service.CalculateMateriaColectavel(salaryBase, sujeicaoIrt, inss)
+			inss := service.CalculateSocialSegurance(salaryBase, subsidyFood, subsidyTransPort, premeo)
+			mc := service.CalculateColletableMaterial(salaryBase, sujeicaoIrt, inss)
 			irt, _ := service.CalculateIRT(mc)
 
 			expected := 36000.26
@@ -303,24 +292,23 @@ func TestCirt(t *testing.T) {
 				t.Errorf("Expected %v, received %v", expected, result)
 			}
 		})
-
-		t.Run("Should calculate salary liquido", func(t *testing.T) {
+		t.Run("Should calculate salary liquid", func(t *testing.T) {
 			// Arrange
 			service := cirt.NewService()
 			salaryBase := 20000.256
-			subSidiT := 1000.0
-			subSidiA := 1000.0
+			subsidyTransport := 1000.0
+			subsidyFood := 1000.0
 			premeo := 5000.0
 			sujeicaoIrt := 0.0
-			inss := service.CalculateSocialSegurance(salaryBase, subSidiA, subSidiT, premeo)
-			mc := service.CalculateMateriaColectavel(salaryBase, sujeicaoIrt, inss)
+			inss := service.CalculateSocialSegurance(salaryBase, subsidyFood, subsidyTransport, premeo)
+			mc := service.CalculateColletableMaterial(salaryBase, sujeicaoIrt, inss)
 			irt, _ := service.CalculateIRT(mc)
 			discount := service.DiscountTotal(inss, irt)
 
 			expected := 164752.25
 
 			// Act
-			result := service.CalculateSalaryLiquido(salaryBase, subSidiT, subSidiA, premeo, discount)
+			result := service.CalculateSalaryLiquido(salaryBase, subsidyTransport, subsidyFood, premeo, discount)
 
 			// Assert
 			if result != float64(expected) {
