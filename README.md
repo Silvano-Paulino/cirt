@@ -3,15 +3,15 @@
 
 Este projecto tem o proposito de facilitar as empresas em calcular o IRT de cada funcionário. Para construir a aplicação a base fundamental foi o conceito de Testing Driven Development, que é abordagem que consistem em criar a aplicação apartir dos testes, boas práticas de pprogramação como o KISS, DRY e SRP.
 
-Para que a aplicação seja executada, é necessário gerar o executável no seu terminal de preferência. Por exemplo: 
+Para que a aplicação seja executada, abra o projecto na pasta raiz a partir do seu terminal. E execute os seguintes comandos: 
 
-Para todas as distro Linux:
+1. Para todas as distro Linux:
 
 ```
   go build -o cirt 
 ```
 
- Para sistema windows:
+2. Para sistema windows:
 ```
   go build -o cirt.exe 
 ```
